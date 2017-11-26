@@ -3,6 +3,9 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
@@ -10,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int
@@ -180,5 +183,32 @@ class User
     public function getSurname()
     {
         return $this->surname;
+    }
+
+    /**
+     * Get SALT
+     * 
+     * @return string
+     */
+    public function getSalt()
+    {
+        // using bcrypt so not relevant
+        return;
+    }
+
+    /**
+     * Get roles
+     */
+    public function getRoles()
+    {
+        return;
+    }
+
+    /**
+     * Erase credentials
+     */
+    public function eraseCredentials()
+    {
+        return;
     }
 }
