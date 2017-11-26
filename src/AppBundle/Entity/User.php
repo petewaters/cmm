@@ -32,6 +32,12 @@ class User implements UserInterface
     private $username;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Length(max=4096)
+     */
+    private $plainPassword;    
+
+    /**
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
@@ -58,6 +64,14 @@ class User implements UserInterface
      * @ORM\Column(name="surname", type="string", length=255)
      */
     private $surname;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload the product brochure as a PDF file.")
+     * @Assert\Image
+     */
+    private $avatar;
 
 
     /**
@@ -91,6 +105,26 @@ class User implements UserInterface
     public function getUsername()
     {
         return $this->username;
+    }
+
+    /**
+     * Set plain password
+     *
+     * @return string 
+     */
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
+    }
+
+    /**
+     * Get plain password
+     *
+     * @return string 
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
     }
 
     /**
@@ -193,7 +227,7 @@ class User implements UserInterface
     public function getSalt()
     {
         // using bcrypt so not relevant
-        return;
+        return null;
     }
 
     /**
@@ -201,7 +235,7 @@ class User implements UserInterface
      */
     public function getRoles()
     {
-        return;
+        return array('ROLE_USER');  
     }
 
     /**
@@ -209,6 +243,24 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-        return;
+        return null;
+    }
+
+    /**
+     * Get user avatar
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * Set the user's avatar
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+
+        return $this;
     }
 }
