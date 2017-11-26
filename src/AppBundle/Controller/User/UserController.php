@@ -41,7 +41,7 @@ class UserController extends Controller
     /**
      * Matches /user/update/*
      * 
-     * @Route("/user/update/{id}", name="user_update")
+     * @Route("/user/update", name="user_update")
      */
     public function update($id)
     {
