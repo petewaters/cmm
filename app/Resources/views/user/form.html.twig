@@ -1,34 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div id="wrapper">
-        <div id="container">
-            <div class="panel panel-default">
-                <div class="panel-header">
-                    User Details
-                </div>
-                <div class="panel-body">
-                    <form action="{{ path("user_update") }}" method="POST">
-                        <div class="form-group">
-                            <label for="email" class="control-label">Email</label>
-                            <input type="text" name="email" id="email" value="{{ user.email is defined ? user.email : '' }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="firstname" class="control-label">First Name</label>
-                            <input type="text" name="firstname" id="firstname" value="{{ user.firstname is defined ? user.firstname : '' }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="surname" class="control-label">Surname</label>
-                            <input type="text" name="surname" id="surname" value="{{ user.surname is defined ? user.surname : '' }}">
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" value="Save">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    {{ form_start(form) }}
+        {{ form_row(form.username) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.plainPassword.first) }}
+        {{ form_row(form.plainPassword.second) }}
+        {{ form_row(form.firstname) }}
+        {{ form_row(form.surname) }}
+        
+        <img src="{{ asset('uploads/users/avatars/') }}/{{ avatar }}">
+        {{ form_row(form.avatar) }}
+
+        <button type="submit">Update</button>
+    {{ form_end(form) }}
 {% endblock %}
 
 {% block stylesheets %}{% endblock %}

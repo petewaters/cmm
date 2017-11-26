@@ -3,8 +3,10 @@
 namespace AppBundle\Controller\User;
 
 use AppBundle\Entity\User;   
+use AppBundle\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class UserController extends Controller
 {
@@ -13,11 +15,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        // $user = $this->getDoctrine()
-        //     ->getRepository(User::class)
-        //     ->findLatest();
-
-        $user = 'werd';
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            throw $this->createAccessDeniedException();
+        }
+    
+        $user = $this->getDoctrine()
+                     ->getRepository(User::class)
+                     ->findOneBy(array('id' => ($this->get('security.token_storage')->getToken()->getUser())->getId()));
 
         return $this->render('user/index.html.twig', array(
             'user' => $user,
@@ -31,10 +35,15 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->findBy(array('id' => $id));
+        $user = $this->getDoctrine()
+                     ->getRepository(User::class)
+                     ->findOneBy(array('id' => ($this->get('security.token_storage')->getToken()->getUser())->getId()));
+
+        $form = $this->createForm(UserType::class, $user);
 
         return $this->render('user/form.html.twig', array(
-            'user' => $user,
+            'form' => $form->createView(),
+            'avatar' => $user->getAvatar(),
         ));       
     }
 
@@ -43,7 +52,7 @@ class UserController extends Controller
      * 
      * @Route("/user/update", name="user_update")
      */
-    public function update($id)
+    public function update(Request $request)
     {
         
     }

@@ -10,6 +10,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+// Events
+use AppBundle\EventsBundle\Event\UserRegistered;
+
 class RegistrationController extends Controller
 {
     /**
@@ -30,24 +33,31 @@ class RegistrationController extends Controller
                 ->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
 
-            // 4) save the User!
+            // $file stores the uploaded image
+            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
+            $file = $user->getAvatar();
+            
+            // Generate a unique name for the file before saving it
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
+
+            // Move the file to the directory where brochures are stored
+            $file->move(
+                $this->getParameter('avatars_dir'),
+                $fileName
+            );
+
+            // Update the avatar property to store the image file name
+            // instead of its contents
+            $user->setAvatar($fileName);
+
+            // Dispatch an event to send welcome email
+            $event = new UserRegistered('UserRegistered', $user);
+            $this->get('event_dispatcher')->dispatch('app.event.user_registered', $event);
+
+            // Save the user
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
-
-            $message = (new \Swift_Message('Hello from Symfony'))
-            ->setFrom('send@example.com')
-            ->setTo($user->getEmail())
-            ->setBody(
-                $this->renderView(
-                    'emails/register.html.twig',
-                    array('firstname' => $user->getFirstname())
-                ),
-                'text/html'
-            )
-        ;
-    
-            $this->get('mailer')->send($message);
 
             return $this->redirectToRoute('user');
         }

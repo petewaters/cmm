@@ -3,7 +3,12 @@
 {% block body %}
     <div id="wrapper">
         <div id="container">
-            {{ user }}
+            {{ user.username }}
+            {{ user.firstname }}
+            {{ user.surname }}
+            {{ user.email }}
+
+            <img src="{{ asset('uploads/users/avatars') }}/{{ user.avatar }}" alt="{{ user.firstname }} {{ user.surname }}">
         </div>
     </div>
 {% endblock %}
