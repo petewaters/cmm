@@ -35,7 +35,6 @@ class RegistrationController extends Controller
 
             // TODO: Should really farm this out to an event
 
-            // $file stores the uploaded image
             /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
             $file = $user->getAvatar();
             
