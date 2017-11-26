@@ -3,7 +3,7 @@ namespace AppBundle\EventsBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
-class UserRegistered extends Event
+class AvatarUploaded extends Event
 {
     protected $name;
     protected $user;

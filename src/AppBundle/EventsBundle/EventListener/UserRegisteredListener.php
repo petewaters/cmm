@@ -1,5 +1,4 @@
 <?php
-// src/AppBundle/EventBundle/EventListener/PageViewedListener.php
 namespace AppBundle\EventsBundle\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -23,9 +22,9 @@ class UserRegisteredListener implements EventSubscriberInterface
     {
         // Send the newly registered user a welcome email
         $message = (new \Swift_Message('Hello from Symfony'))
-        ->setFrom('send@example.com')
-        ->setTo(($event->getUser())->getEmail())
-        ->setBody("Welcome " . ($event->getUser())->getFirstname());
+                        ->setFrom('send@example.com')
+                        ->setTo(($event->getUser())->getEmail())
+                        ->setBody("Welcome " . ($event->getUser())->getFirstname());
 
         $this->mailer->send($message);
     }

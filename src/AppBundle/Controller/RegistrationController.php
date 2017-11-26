@@ -20,18 +20,20 @@ class RegistrationController extends Controller
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder = null)
     {
-        // 1) build the form
+        // Build the form
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
-        // 2) handle the submit (will only happen on POST)
+        // Handle form submit
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // 3) Encode the password (you could also do this via Doctrine listener)
+            // Bcrypt the crap out of that password
             $password = $this->get('security.password_encoder')
                 ->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
+
+            // TODO: Should really farm this out to an event
 
             // $file stores the uploaded image
             /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
